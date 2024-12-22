@@ -1,0 +1,6 @@
+﻿services:
+  lightningrisk.webapi:
+    image: lightningrisk.webapi
+    build:
+      context: .
+      dockerfile: LightningRisk.WebApi/Dockerfile

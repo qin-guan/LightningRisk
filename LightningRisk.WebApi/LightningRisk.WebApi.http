@@ -1,0 +1,6 @@
+@LightningRisk.WebApi_HostAddress = http://localhost:5072
+
+GET {{LightningRisk.WebApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
