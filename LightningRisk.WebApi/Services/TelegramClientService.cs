@@ -26,6 +26,7 @@ public class TelegramClientService : BackgroundService
             "api_id" => configuration["Telegram:ApiId"],
             "api_hash" => configuration["Telegram:ApiHash"],
             "phone_number" => configuration["Telegram:PhoneNumber"],
+            "session_pathname" => configuration["Telegram:SessionPathname"],
             _ => WTelegram.Client.DefaultConfig(config)
         });
 
