@@ -2,6 +2,7 @@
 
 if [ -f "/app/WTelegramClient.session" ]; then
   echo "Session file exists, skipping..."
+  ls "/app/WTelegramClient.session"
 else
   if [ -f "/app/WTelegramClient.session.base64" ]; then
     base64 -d "/app/WTelegramClient.session.base64" > /app/WTelegramClient.session;
