@@ -20,4 +20,4 @@ RUN dotnet publish "LightningRisk.WebApi.csproj" -c $BUILD_CONFIGURATION -o /app
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "LightningRisk.WebApi.dll"]
+ENTRYPOINT ["bash", "./Scripts/startup.sh"]
