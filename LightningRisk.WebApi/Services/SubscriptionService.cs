@@ -63,13 +63,13 @@ public class SubscriptionService(ITelegramBotClient client, AppDbContext dbConte
 
             foreach (var subscription in user)
             {
-                if (string.IsNullOrWhiteSpace(Sector.KnownSectors[subscription.SectorCode]))
+                if (string.IsNullOrWhiteSpace(Sector.KnownSectors.Single(s => s.Code == subscription.SectorCode).Name))
                 {
                     msg += $"<b>{subscription.SectorCode}</b>";
                 }
                 else
                 {
-                    msg += $"<b><u>{Sector.KnownSectors[subscription.SectorCode]}</u></b>";
+                    msg += $"<b><u>{Sector.KnownSectors.Single(s => s.Code == subscription.SectorCode).Name}</u></b>";
                 }
 
                 msg += "\n";

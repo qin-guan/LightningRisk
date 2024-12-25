@@ -1,6 +1,3 @@
-using LightningRisk.Core;
-using TL;
-
 namespace LightningRisk.WebApi.Services;
 
 public class LightningRiskService(IWebHostEnvironment environment)

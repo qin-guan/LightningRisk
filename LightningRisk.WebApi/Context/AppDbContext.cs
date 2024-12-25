@@ -11,7 +11,6 @@ public partial class AppDbContext : DbContext
     }
 
     public DbSet<Subscription> Subscriptions { get; set; }
-    public DbSet<Chat> Chats { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

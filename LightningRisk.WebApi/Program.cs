@@ -1,4 +1,3 @@
-using System.Net.Http.Headers;
 using LightningRisk.WebApi.Context;
 using LightningRisk.WebApi.Services;
 using Polly;
@@ -31,6 +30,7 @@ builder.Services.AddHttpClient(nameof(TelegramBotClient))
 
 builder.Services.AddScoped<LightningRiskService>();
 builder.Services.AddScoped<SubscriptionService>();
+builder.Services.AddScoped<TelegramBotUpdateFinalHandler>();
 builder.Services.AddScoped<IUpdateHandler, TelegramBotUpdateHandlerService>();
 
 builder.Services.AddHostedService<TelegramClientService>();
