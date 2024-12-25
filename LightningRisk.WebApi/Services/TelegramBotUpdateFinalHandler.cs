@@ -109,9 +109,9 @@ public class TelegramBotUpdateFinalHandler(
 
                 msg += """
 
-
                        Send any message to show this prompt again.
-                       Have a GOOD DAY ahead!
+
+                       GOOD DAY!
                        """;
 
                 await bot.SendMessage(
