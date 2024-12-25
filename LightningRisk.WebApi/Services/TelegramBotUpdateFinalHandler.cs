@@ -182,19 +182,44 @@ public class TelegramBotUpdateFinalHandler(
         if (msg.Text is null)
             return;
 
-        var markup = new InlineKeyboardMarkup();
+        switch (msg.Text)
+        {
+            case "/stats":
+            {
+                var totalSubscriptions = await dbContext.Subscriptions.LongCountAsync(cancellationToken: ct);
+                var users = await dbContext.Subscriptions.Select(s => s.SectorCode).Distinct()
+                    .CountAsync(cancellationToken: ct);
 
-        var existing = await dbContext.Subscriptions.Where(s => s.ChatId == msg.Chat.Id)
-            .ToListAsync(cancellationToken: ct);
-        
-        AddSectorButtons(markup, existing.Select(s => new Sector(s.SectorCode)).ToArray());
+                await bot.SendMessage(
+                    msg.Chat,
+                    $"""
+                     Total subscriptions: {totalSubscriptions}
+                     Users: {users}
+                     """,
+                    cancellationToken: ct
+                );
 
-        await bot.SendMessage(
-            msg.Chat,
-            "What sectors would you like to subscribe to?",
-            replyMarkup: markup,
-            cancellationToken: ct
-        );
+                break;
+            }
+            default:
+            {
+                var markup = new InlineKeyboardMarkup();
+
+                var existing = await dbContext.Subscriptions.Where(s => s.ChatId == msg.Chat.Id)
+                    .ToListAsync(cancellationToken: ct);
+
+                AddSectorButtons(markup, existing.Select(s => new Sector(s.SectorCode)).ToArray());
+
+                await bot.SendMessage(
+                    msg.Chat,
+                    "What sectors would you like to subscribe to?",
+                    replyMarkup: markup,
+                    cancellationToken: ct
+                );
+
+                break;
+            }
+        }
     }
 
     private Task UnknownUpdateHandlerAsync(Update update)
