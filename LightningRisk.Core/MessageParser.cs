@@ -1,4 +1,4 @@
-﻿using System.Text.RegularExpressions;
+using System.Text.RegularExpressions;
 
 namespace LightningRisk.Core;
 
@@ -7,10 +7,10 @@ public static partial class MessageParser
     [GeneratedRegex(@"\((\d{4})-(\d{4})\)")]
     private static partial Regex TimeSpanRegex();
 
-    [GeneratedRegex(@"\[CAT Status Update\] ⚡️\nAll Sectors Clear \(\d{4}-\d{4}\)")]
+    [GeneratedRegex(@"\[CAT Status Update\].+\nAll Sectors Clear \(\d{4}-\d{4}\)")]
     private static partial Regex AllSectorsClearRegex();
 
-    [GeneratedRegex(@"\[CAT Status Update\] ⚡️\nCAT 1:")]
+    [GeneratedRegex(@"\[CAT Status Update\].+\nCAT 1:")]
     private static partial Regex Cat1HeaderRegex();
 
     [GeneratedRegex(@"\(\d{4}-\d{4}\)\n(?:.{1,3},*)+")]
