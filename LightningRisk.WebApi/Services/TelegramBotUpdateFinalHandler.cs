@@ -187,7 +187,7 @@ public class TelegramBotUpdateFinalHandler(
             case "/stats":
             {
                 var totalSubscriptions = await dbContext.Subscriptions.LongCountAsync(cancellationToken: ct);
-                var users = await dbContext.Subscriptions.Select(s => s.SectorCode).Distinct()
+                var users = await dbContext.Subscriptions.Select(s => s.ChatId).Distinct()
                     .CountAsync(cancellationToken: ct);
 
                 await bot.SendMessage(
