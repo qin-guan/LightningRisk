@@ -74,9 +74,18 @@ public class SubscriptionService(ITelegramBotClient client, AppDbContext dbConte
 
                 msg += "\n";
 
-                msg += $"in {(sectors[subscription.SectorCode].Item1 - DateTime.Now).TotalMinutes:N0} mins" +
-                       "\n" +
-                       $"{sectors[subscription.SectorCode].Item1.ToShortTimeString()} - {sectors[subscription.SectorCode].Item2.ToShortTimeString()}" +
+                if (sectors[subscription.SectorCode].Item1 <= DateTime.Now) 
+                {
+                    msg += $"now";
+                }
+                else
+                {
+                    msg += $"in {(sectors[subscription.SectorCode].Item1 - DateTime.Now).TotalMinutes:N0} mins";
+                }
+
+                msg += "\n";
+
+                msg += $"{sectors[subscription.SectorCode].Item1.ToShortTimeString()} - {sectors[subscription.SectorCode].Item2.ToShortTimeString()}" +
                        "\n\n";
             }
 
