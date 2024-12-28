@@ -44,7 +44,7 @@ public record Sector(string Code)
         {
             return Code switch
             {
-                "09" => "Kranji Camp 3",
+                "06" => "Kranji Camp 2/3",
                 "19N" => "Pulau Tekong (Rocky Hill)",
                 "19S" => "Pulau Tekong (Ladang)",
                 _ => ""
