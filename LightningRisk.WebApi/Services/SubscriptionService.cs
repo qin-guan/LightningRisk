@@ -56,8 +56,6 @@ public class SubscriptionService(ITelegramBotClient client, AppDbContext dbConte
             var msg = $"""
                        {WarningHeader}
 
-                       The following sectors you have subscribed to have CAT 1 alerts!
-
 
                        """;
 
