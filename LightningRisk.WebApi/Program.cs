@@ -20,6 +20,15 @@ builder.Services.AddResiliencePipeline("Telegram",
         });
     });
 
+builder.Services.AddResiliencePipeline("Dgs",
+    pipeline =>
+    {
+        pipeline.AddRetry(new RetryStrategyOptions
+        {
+            Delay = TimeSpan.FromSeconds(10)
+        });
+    });
+
 builder.Services.AddHttpClient(nameof(TelegramBotClient))
     .AddTypedClient<ITelegramBotClient>((httpClient, sp) =>
         new TelegramBotClient(
@@ -28,13 +37,16 @@ builder.Services.AddHttpClient(nameof(TelegramBotClient))
         )
     );
 
+builder.Services.AddHttpApi<IDgsApi>();
+
 builder.Services.AddScoped<LightningRiskService>();
 builder.Services.AddScoped<SubscriptionService>();
 builder.Services.AddScoped<TelegramBotUpdateFinalHandler>();
 builder.Services.AddScoped<IUpdateHandler, TelegramBotUpdateHandlerService>();
 
-builder.Services.AddHostedService<TelegramClientService>();
-builder.Services.AddHostedService<TelegramBotPollingService>();
+builder.Services.AddHostedService<DgsLightningBackgroundService>();
+// builder.Services.AddHostedService<TelegramClientService>();
+// builder.Services.AddHostedService<TelegramBotPollingService>();
 
 builder.Services.AddOpenApi();
 
