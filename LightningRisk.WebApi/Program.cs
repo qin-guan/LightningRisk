@@ -37,8 +37,6 @@ builder.Services.AddHttpClient(nameof(TelegramBotClient))
         )
     );
 
-builder.Services.AddHttpApi<IDgsApi>();
-
 builder.Services.AddScoped<LightningRiskService>();
 builder.Services.AddScoped<SubscriptionService>();
 builder.Services.AddScoped<TelegramBotUpdateFinalHandler>();
