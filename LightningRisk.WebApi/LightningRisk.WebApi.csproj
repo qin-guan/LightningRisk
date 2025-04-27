@@ -30,14 +30,16 @@
             <Link>.dockerignore</Link>
         </Content>
     </ItemGroup>
+    
+    <ItemGroup>
+        <Content Include=".\Scripts\*">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\LightningRisk.Core\LightningRisk.Core.csproj"/>
         <ProjectReference Include="..\LightningRisk.ServiceDefaults\LightningRisk.ServiceDefaults.csproj"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <_ContentIncludedByDefault Remove="Services\WbgtObservations\kiota-lock.json"/>
     </ItemGroup>
 
 </Project>
