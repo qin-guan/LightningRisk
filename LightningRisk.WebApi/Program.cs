@@ -47,26 +47,19 @@ builder.Services.AddScoped<ISqlSugarClient>(sp =>
     var sqlSugar = new SqlSugarClient(new ConnectionConfig
         {
             DbType = DbType.Sqlite,
-            ConnectionString = "DataSource=app.db",
+            ConnectionString = builder.Configuration.GetConnectionString("Sqlite"),
             IsAutoCloseConnection = true,
         },
         db =>
         {
             var log = sp.GetRequiredService<ILogger<ISqlSugarClient>>();
-
-            db.Aop.OnLogExecuting = (sql, pars) =>
-            {
-                log.LogInformation("SQL statement: {Stmt} {Pars}", sql, pars);
-            };
+            db.Aop.OnLogExecuting = (sql, _) => { log.LogInformation("SQL statement: {Stmt}", sql); };
         });
     return sqlSugar;
 });
 
 builder.Services.AddSingleton<UpdateChannel>();
-builder.Services.AddMediator(options =>
-{
-    options.ServiceLifetime = ServiceLifetime.Scoped;
-});
+builder.Services.AddMediator(options => { options.ServiceLifetime = ServiceLifetime.Scoped; });
 
 builder.Services.AddTransient<ReplyMarkupService>();
 builder.Services.AddTransient<IUpdateHandler, UpdateHandler>();
