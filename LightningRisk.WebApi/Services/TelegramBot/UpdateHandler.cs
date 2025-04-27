@@ -1,7 +1,3 @@
-using System.Diagnostics;
-using LightningRisk.WebApi.Services.TelegramBot.Handlers;
-using Mediator;
-using R3;
 using Telegram.Bot;
 using Telegram.Bot.Polling;
 using Telegram.Bot.Types;
