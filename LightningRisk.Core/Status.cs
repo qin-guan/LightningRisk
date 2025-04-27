@@ -1,3 +1,3 @@
 namespace LightningRisk.Core;
 
-public record Status(IList<Sector> Sectors, DateTime StartTime, DateTime EndTime);
+public record Status(List<Sector> Sectors, DateTime StartTime, DateTime EndTime);

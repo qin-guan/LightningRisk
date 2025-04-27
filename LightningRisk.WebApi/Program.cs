@@ -1,17 +1,30 @@
-using LightningRisk.WebApi.Context;
+using LightningRisk.WebApi.Entities;
 using LightningRisk.WebApi.Services;
+using LightningRisk.WebApi.Services.TelegramBot;
+using LightningRisk.WebApi.Services.TelegramBot.Handlers;
+using LightningRisk.WebApi.Services.TelegramClient;
 using Polly;
 using Polly.Retry;
+using SqlSugar;
 using Telegram.Bot;
 using Telegram.Bot.Polling;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddSqlite<AppDbContext>(builder.Configuration.GetConnectionString("Sqlite"));
+builder.AddServiceDefaults();
 
 builder.Services.ConfigureTelegramBot<Microsoft.AspNetCore.Http.Json.JsonOptions>(opt => opt.SerializerOptions);
 
 builder.Services.AddResiliencePipeline("Telegram",
+    pipeline =>
+    {
+        pipeline.AddRetry(new RetryStrategyOptions
+        {
+            Delay = TimeSpan.FromSeconds(10)
+        });
+    });
+
+builder.Services.AddResiliencePipeline("Dgs",
     pipeline =>
     {
         pipeline.AddRetry(new RetryStrategyOptions
@@ -28,13 +41,38 @@ builder.Services.AddHttpClient(nameof(TelegramBotClient))
         )
     );
 
-builder.Services.AddScoped<LightningRiskService>();
-builder.Services.AddScoped<SubscriptionService>();
-builder.Services.AddScoped<TelegramBotUpdateFinalHandler>();
-builder.Services.AddScoped<IUpdateHandler, TelegramBotUpdateHandlerService>();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ISqlSugarClient>(sp =>
+{
+    var sqlSugar = new SqlSugarClient(new ConnectionConfig
+        {
+            DbType = DbType.Sqlite,
+            ConnectionString = "DataSource=app.db",
+            IsAutoCloseConnection = true,
+        },
+        db =>
+        {
+            var log = sp.GetRequiredService<ILogger<ISqlSugarClient>>();
 
-builder.Services.AddHostedService<TelegramClientService>();
-builder.Services.AddHostedService<TelegramBotPollingService>();
+            db.Aop.OnLogExecuting = (sql, pars) =>
+            {
+                log.LogInformation("SQL statement: {Stmt} {Pars}", sql, pars);
+            };
+        });
+    return sqlSugar;
+});
+
+builder.Services.AddSingleton<UpdateChannel>();
+builder.Services.AddMediator(options =>
+{
+    options.ServiceLifetime = ServiceLifetime.Scoped;
+});
+
+builder.Services.AddTransient<ReplyMarkupService>();
+builder.Services.AddTransient<IUpdateHandler, UpdateHandler>();
+builder.Services.AddHostedService<PollingBackgroundService>();
+builder.Services.AddHostedService<ChannelReaderBackgroundService>();
+builder.Services.AddHostedService<UpdateBackgroundService>();
 
 builder.Services.AddOpenApi();
 
@@ -47,8 +85,8 @@ if (app.Environment.IsDevelopment())
 }
 
 await using var scope = app.Services.CreateAsyncScope();
-var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-await db.Database.EnsureCreatedAsync();
+var db = scope.ServiceProvider.GetRequiredService<ISqlSugarClient>();
+db.CodeFirst.InitTables<Subscription>();
 
 app.UseHttpsRedirection();
 

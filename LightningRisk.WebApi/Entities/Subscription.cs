@@ -1,13 +1,14 @@
 using System.ComponentModel.DataAnnotations;
-using Microsoft.EntityFrameworkCore;
+using SqlSugar;
 
 namespace LightningRisk.WebApi.Entities;
 
-[Index(nameof(ChatId), nameof(SectorCode), IsUnique = true)]
 public class Subscription
 {
-    public int Id { get; set; }
+    [SugarColumn(IsPrimaryKey = true)] 
+    public long ChatId { get; set; }
 
-    public required long ChatId { get; set; }
-    [MaxLength(3)] public required string SectorCode { get; set; }
+    [MaxLength(3)]
+    [SugarColumn(IsPrimaryKey = true)]
+    public string SectorCode { get; set; }
 }

@@ -4,3 +4,9 @@
     build:
       context: .
       dockerfile: LightningRisk.WebApi/Dockerfile
+  lightningrisk.authorizer:
+    image: lightningrisk.authorizer
+    build:
+      context: .
+      dockerfile: LightningRisk.Authorizer/Dockerfile
+

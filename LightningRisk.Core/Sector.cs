@@ -47,7 +47,7 @@ public record Sector(string Code)
                 "06" => "Kranji Camp 2/3",
                 "19N" => "Pulau Tekong (Rocky Hill)",
                 "19S" => "Pulau Tekong (Ladang)",
-                _ => ""
+                _ => Code
             };
         }
     }
