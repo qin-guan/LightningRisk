@@ -44,7 +44,6 @@ builder.Services.AddHttpClient(nameof(TelegramBotClient))
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ISqlSugarClient>(sp =>
 {
-    Console.WriteLine(builder.Configuration.GetConnectionString("Sqlite"));
     var sqlSugar = new SqlSugarClient(new ConnectionConfig
         {
             DbType = DbType.Sqlite,
