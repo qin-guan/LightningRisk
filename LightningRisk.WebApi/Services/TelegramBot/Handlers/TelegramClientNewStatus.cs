@@ -37,6 +37,7 @@ public sealed class TelegramClientNewStatusHandler(ITelegramBotClient botClient,
             await Parallel.ForEachAsync(chats,
                 async (id, ct) =>
                 {
+                    try {
                     await botClient.SendMessage(
                         id,
                         $"""
@@ -49,7 +50,7 @@ public sealed class TelegramClientNewStatusHandler(ITelegramBotClient botClient,
                          {request.Status.First().StartTime.ToShortTimeString()} - {request.Status.Last().EndTime.ToShortTimeString()}
                          """,
                         ParseMode.Html
-                    );
+                    ); } catch {}
                 });
         }
 
